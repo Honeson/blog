@@ -1,0 +1,36 @@
+{% extends 'blog/_base.html' %}
+{% block title %} <title>{{ post.title }}</title> {% endblock title %}
+{% block content %}
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+                <div class="col-12"><h1>{{ post.title }}</h1></a></div>
+                <div class="col-12"><p>{{ post.content|safe}}  
+                By <i>{{ post.author }}</i> <br> <em> on {{ post.published_date }}</em>
+                </p>
+                </div>
+                <a href="{% url 'blog_home' %}">Back to Home</a><br>
+        </div>
+    
+    <div class="col-md-12">
+        {% with comments.count as total_comments %}
+        <h2>
+            {{ total_comments }} comment{{ total_comments|pluralize }}
+        </h2>
+        {% endwith %}
+
+        {% for comment in comments %}
+            Comment {{ forloop.counter }} by {{ comment.name }}
+            on {{ comment.publish }}
+            {{ comment.content|linebreaks }}
+        {% empty %}
+            <p>There are no comments for this post yet.</p>
+        {% endfor %}
+        <h2>Make a new comment</h2>
+        <form id="myForm" method="post">
+            {{ comment_form.as_p }}
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary btn-lg col-12">Comment</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
